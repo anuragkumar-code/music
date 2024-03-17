@@ -41,6 +41,10 @@ class PlaylistController extends Controller
         try {
             $user = JWTAuth::parseToken()->authenticate();
 
+            if (is_null($user)) {
+                return response()->json(['error' => 'unauthorized'], 401);
+            }
+    
             $playlists = DB::table('playlists')->where('user_id', $user->id)->get();
 
             if ($playlists->isEmpty()) {
